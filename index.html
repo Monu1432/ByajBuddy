@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinFlow - Complete Loan Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D3;
+            --primary-light: #8B85FF;
+            --secondary: #FF6584;
+            --success: #36D1DC;
+            --warning: #FFB347;
+            --danger: #FF5A5F;
+            --dark: #1A1D29;
+            --darker: #12141C;
+            --light: #F5F7FF;
+            --gray: #8F94A3;
+            --white: #FFFFFF;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(108, 99, 255, 0.3);
+        }
+
+        .logo-icon i {
+            font-size: 1.3rem;
+            color: var(--white);
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 3px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 8px 16px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #5B86E5);
+            color: var(--white);
+            box-shadow: 0 8px 16px rgba(54, 209, 220, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(54, 209, 220, 0.4);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: var(--white);
+            box-shadow: 0 8px 16px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #C6426E);
+            color: var(--white);
+            box-shadow: 0 8px 16px rgba(255, 90, 95, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(255, 90, 95, 0.4);
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dashboard-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass);
+            width: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: var(--white);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--glass);
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .card h2 i {
+            margin-right: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light);
+            font-size: 0.95rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--light);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .auto-calc {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--success);
+            border-left: 4px solid var(--success);
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--light);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr {
+            transition: var(--transition);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-card.loans {
+            border-top: 4px solid var(--primary);
+        }
+
+        .summary-card.amount {
+            border-top: 4px solid var(--success);
+        }
+
+        .summary-card.interest {
+            border-top: 4px solid var(--warning);
+        }
+
+        .summary-card h3 {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            margin: 10px 0;
+        }
+
+        .summary-card i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .loans .summary-card i {
+            color: var(--primary);
+        }
+
+        .amount .summary-card i {
+            color: var(--success);
+        }
+
+        .interest .summary-card i {
+            color: var(--warning);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        .loan-details {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .loan-details p {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        /* Utility Classes */
+        .btn-block {
+            width: 100%;
+        }
+
+        .loan-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(54, 209, 220, 0.2);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(255, 179, 71, 0.2);
+            color: var(--warning);
+        }
+
+        .status-overdue {
+            background: rgba(255, 90, 95, 0.2);
+            color: var(--danger);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 250px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--success), #5B86E5);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            max-width: 90vw;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Floating Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass);
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(108, 99, 255, 0.7);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(10px);
+            padding: 15px;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(30px) scale(0.95);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .app-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+            
+            .dashboard-view {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 25px;
+            }
+            
+            .card {
+                padding: 25px;
+                border-radius: 20px;
+            }
+            
+            .card h2 {
+                font-size: 1.4rem;
+                margin-bottom: 25px;
+            }
+            
+            .form-group {
+                margin-bottom: 25px;
+            }
+            
+            input, select, textarea {
+                padding: 16px 20px;
+            }
+            
+            th, td {
+                padding: 18px 20px;
+                font-size: 1rem;
+            }
+            
+            .btn {
+                width: auto;
+                padding: 14px 28px;
+            }
+            
+            .btn-block {
+                width: 100%;
+            }
+            
+            .tab {
+                flex: none;
+                padding: 14px 28px;
+            }
+            
+            .summary-cards {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            
+            .summary-value {
+                font-size: 2.2rem;
+            }
+            
+            .summary-card i {
+                font-size: 2.5rem;
+            }
+            
+            .floating-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        @media (max-width: 767px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .logo {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .user-actions {
+                width: 100%;
+                margin-top: 15px;
+                display: none;
+                flex-direction: column;
+            }
+            
+            .user-actions.show {
+                display: flex;
+            }
+            
+            .user-actions .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.3rem;
+            }
+            
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .logo-icon i {
+                font-size: 1.2rem;
+            }
+            
+            .card {
+                padding: 15px;
+                border-radius: 14px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            
+            input, select, textarea {
+                padding: 12px 14px;
+            }
+            
+            .chart-container {
+                height: 200px;
+            }
+            
+            .floating-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .notification {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>FinFlow</h1>
+                    <p>Complete Loan Management System</p>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-primary" id="exportBtn">
+                    <i class="fas fa-file-export"></i> Export Data
+                </button>
+                <button class="btn btn-success" id="analyticsBtn">
+                    <i class="fas fa-chart-pie"></i> Analytics
+                </button>
+                <button class="btn btn-whatsapp" id="remindersBtn">
+                    <i class="fas fa-bell"></i> Auto Reminders
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-view">
+            <div>
+                <div class="card">
+                    <h3><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h3>
+                    <div class="summary-cards">
+                        <div class="summary-card loans">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <h3>Total Loans</h3>
+                            <div class="summary-value" id="totalLoans">0</div>
+                            <p>Active loans</p>
+                        </div>
+                        <div class="summary-card amount">
+                            <i class="fas fa-indian-rupee-sign"></i>
+                            <h3>Total Amount</h3>
+                            <div class="summary-value" id="totalAmount">₹0</div>
+                            <p>All loans combined</p>
+                        </div>
+                        <div class="summary-card interest">
+                            <i class="fas fa-percentage"></i>
+                            <h3>Monthly Interest</h3>
+                            <div class="summary-value" id="totalInterest">₹0</div>
+                            <p>Expected this month</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Financial Reports</h3>
+                    <div class="chart-container">
+                        <canvas id="reportsChart"></canvas>
+                    </div>
+                    <div class="loan-details">
+                        <p><strong>Key Insights:</strong></p>
+                        <p id="insight1">• 70% of loans are performing well</p>
+                        <p id="insight2">• 12% increase in loan portfolio this quarter</p>
+                        <p id="insight3">• Average interest rate: 4.2% per month</p>
+                    </div>
+                    <button class="btn btn-primary btn-block" style="margin-top: 20px;">
+                        <i class="fas fa-download"></i> Download Full Report
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h3><i class="fas fa-bell"></i> Automated Reminders</h3>
+                    <div class="reminder-list" id="reminderList">
+                        <div class="empty-state">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No reminders due. All caught up!</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-block" style="margin-top: 20px;" id="sendRemindersBtn">
+                        <i class="fas fa-paper-plane"></i> Send All Reminders
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-users"></i> Client Management</h3>
+                    <div class="client-management" id="clientList">
+                        <div class="empty-state">
+                            <i class="fas fa-user-plus"></i>
+                            <p>No clients added yet. Add your first loan to see clients.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" style="margin-top: 20px;">
+                        <i class="fas fa-user-plus"></i> Add New Client
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-container">
+            <div>
+                <div class="card">
+                    <h2><i class="fas fa-plus-circle"></i> Add New Loan</h2>
+                    <form id="loanForm">
+                        <div class="form-group">
+                            <label for="clientName">Client Name</label>
+                            <div class="input-container">
+                                <input type="text" id="clientName" placeholder="Enter client name" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <div class="input-container">
+                                <input type="tel" id="phoneNumber" placeholder="Enter phone number" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loanAmount">Loan Amount (₹)</label>
+                            <div class="input-container">
+                                <input type="number" id="loanAmount" placeholder="Enter loan amount" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-rupee-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="interestRate">Interest Rate (% per month)</label>
+                            <div class="input-container">
+                                <input type="number" id="interestRate" step="0.1" placeholder="Enter interest rate" required>
+                                <div class="input-icon">
+                                    <i class="fas fa-percent"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loanDate">Loan Date</label>
+                            <input type="date" id="loanDate" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="auto-calc">
+                                <label>Monthly Interest (Auto Calculated)</label>
+                                <div id="monthlyInterest">₹0.00</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="auto-calc">
+                                <label>Next Interest Date (Auto Calculated)</label>
+                                <div id="nextInterestDate">--/--/----</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-save"></i> Add Loan
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-calculator"></i> Quick Calculator</h2>
+                    <div class="form-group">
+                        <label for="calcAmount">Amount (₹)</label>
+                        <input type="number" id="calcAmount" placeholder="Enter amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="calcRate">Interest Rate (% per month)</label>
+                        <input type="number" id="calcRate" step="0.1" placeholder="Enter interest rate">
+                    </div>
+                    <div class="form-group">
+                        <label for="calcPeriod">Period (months)</label>
+                        <input type="number" id="calcPeriod" value="12" placeholder="Enter period in months">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success btn-block" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> Calculate Interest
+                        </button>
+                    </div>
+                    <div class="loan-details">
+                        <p>Monthly Interest: <span id="calcMonthlyInterest">₹0.00</span></p>
+                        <p>Total Interest: <span id="calcTotalInterest">₹0.00</span></p>
+                        <p>Total Payable: <span id="calcTotalPayable">₹0.00</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="all">All Loans</div>
+                        <div class="tab" data-tab="due">Due This Month</div>
+                        <div class="tab" data-tab="overdue">Overdue</div>
+                    </div>
+                    
+                    <h2><i class="fas fa-list"></i> Loan Records</h2>
+                    <div class="table-container">
+                        <table id="loanTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Amount</th>
+                                    <th>Interest</th>
+                                    <th>Monthly Int.</th>
+                                    <th>Next Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loanTableBody">
+                                <!-- Loans will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="emptyState" class="empty-state">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <p>No loans added yet. Add your first loan using the form.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-comment-alt"></i> WhatsApp Message Preview</h2>
+                    <div class="form-group">
+                        <label for="messageTemplate">Message Template</label>
+                        <textarea id="messageTemplate" rows="6" class="form-control">Hello [Client Name],
+
+Your loan details:
+- Loan Amount: ₹[Loan Amount]
+- Interest Rate: [Interest Rate]% per month
+- Loan Date: [Loan Date]
+- Monthly Interest: ₹[Monthly Interest]
+- Next Interest Date: [Next Interest Date]
+
+Total Due: ₹[Total Due]
+
+Thank you!</textarea>
+                    </div>
+                    <button class="btn btn-whatsapp btn-block" id="sendAllBtn">
+                        <i class="fab fa-whatsapp"></i> Send Reminders to All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-btn" id="addLoanBtn">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i> Loan added successfully!
+    </div>
+
+    <div class="modal" id="analyticsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Advanced Analytics</h3>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <p>Comprehensive analysis of your loan portfolio</p>
+            
+            <div class="chart-container">
+                <canvas id="analyticsChart"></canvas>
+            </div>
+            
+            <div class="loan-details">
+                <p><strong>Portfolio Insights:</strong></p>
+                <p id="modalInsight1">• 70% of loans are performing well</p>
+                <p id="modalInsight2">• 12% increase in loan portfolio this quarter</p>
+                <p id="modalInsight3">• Average interest rate: 4.2% per month</p>
+                <p id="modalInsight4">• Top client: Rahul Sharma (₹50,000)</p>
+                <p id="modalInsight5">• Most profitable loan: ₹2,500 monthly interest</p>
+            </div>
+            
+            <button class="btn btn-primary btn-block" style="margin-top: 20px;">
+                <i class="fas fa-download"></i> Download Detailed Report
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize loans array from localStorage or empty array
+        let loans = JSON.parse(localStorage.getItem('loans')) || [];
+        let payments = JSON.parse(localStorage.getItem('payments')) || [];
+        let clients = JSON.parse(localStorage.getItem('clients')) || [];
+        
+        // DOM elements
+        const loanForm = document.getElementById('loanForm');
+        const loanTableBody = document.getElementById('loanTableBody');
+        const emptyState = document.getElementById('emptyState');
+        const totalLoansEl = document.getElementById('totalLoans');
+        const totalAmountEl = document.getElementById('totalAmount');
+        const totalInterestEl = document.getElementById('totalInterest');
+        const monthlyInterestEl = document.getElementById('monthlyInterest');
+        const nextInterestDateEl = document.getElementById('nextInterestDate');
+        const notification = document.getElementById('notification');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const calcMonthlyInterest = document.getElementById('calcMonthlyInterest');
+        const calcTotalInterest = document.getElementById('calcTotalInterest');
+        const calcTotalPayable = document.getElementById('calcTotalPayable');
+        const sendAllBtn = document.getElementById('sendAllBtn');
+        const tabs = document.querySelectorAll('.tab');
+        const addLoanBtn = document.getElementById('addLoanBtn');
+        const analyticsBtn = document.getElementById('analyticsBtn');
+        const analyticsModal = document.getElementById('analyticsModal');
+        const closeModal = document.getElementById('closeModal');
+        const exportBtn = document.getElementById('exportBtn');
+        const remindersBtn = document.getElementById('remindersBtn');
+        const reminderList = document.getElementById('reminderList');
+        const clientList = document.getElementById('clientList');
+        const sendRemindersBtn = document.getElementById('sendRemindersBtn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const userActions = document.getElementById('userActions');
+        
+        // Input elements for auto-calculation
+        const loanAmountInput = document.getElementById('loanAmount');
+        const interestRateInput = document.getElementById('interestRate');
+        const loanDateInput = document.getElementById('loanDate');
+        const calcAmountInput = document.getElementById('calcAmount');
+        const calcRateInput = document.getElementById('calcRate');
+        const calcPeriodInput = document.getElementById('calcPeriod');
+        
+        // Set today's date as default for loan date
+        const today = new Date();
+        loanDateInput.valueAsDate = today;
+        
+        // Initialize charts
+        let reportsChart, analyticsChart;
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            userActions.classList.toggle('show');
+        });
+        
+        // Auto-calculate monthly interest and next interest date
+        loanAmountInput.addEventListener('input', calculateInterest);
+        interestRateInput.addEventListener('input', calculateInterest);
+        loanDateInput.addEventListener('input', calculateInterest);
+        
+        function calculateInterest() {
+            const loanAmount = parseFloat(loanAmountInput.value) || 0;
+            const interestRate = parseFloat(interestRateInput.value) || 0;
+            const loanDate = new Date(loanDateInput.value);
+            
+            if (loanAmount > 0 && interestRate > 0) {
+                const monthlyInterest = (loanAmount * interestRate) / 100;
+                monthlyInterestEl.textContent = `₹${monthlyInterest.toFixed(2)}`;
+                
+                // Calculate next interest date (30 days from loan date)
+                const nextDate = new Date(loanDate);
+                nextDate.setDate(nextDate.getDate() + 30);
+                nextInterestDateEl.textContent = formatDate(nextDate);
+            } else {
+                monthlyInterestEl.textContent = '₹0.00';
+                nextInterestDateEl.textContent = '--/--/----';
+            }
+        }
+        
+        // Format date to display in readable format
+        function formatDate(date) {
+            return date.toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        
+        // Quick calculator
+        calculateBtn.addEventListener('click', function() {
+            const amount = parseFloat(calcAmountInput.value) || 0;
+            const rate = parseFloat(calcRateInput.value) || 0;
+            const period = parseFloat(calcPeriodInput.value) || 0;
+            
+            if (amount > 0 && rate > 0 && period > 0) {
+                const monthly = (amount * rate) / 100;
+                const totalInterest = monthly * period;
+                const totalPayable = amount + totalInterest;
+                
+                calcMonthlyInterest.textContent = `₹${monthly.toFixed(2)}`;
+                calcTotalInterest.textContent = `₹${totalInterest.toFixed(2)}`;
+                calcTotalPayable.textContent = `₹${totalPayable.toFixed(2)}`;
+            } else {
+                calcMonthlyInterest.textContent = '₹0.00';
+                calcTotalInterest.textContent = '₹0.00';
+                calcTotalPayable.textContent = '₹0.00';
+            }
+        });
+        
+        // Add new loan
+        loanForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const clientName = document.getElementById('clientName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const loanDate = new Date(document.getElementById('loanDate').value);
+            const monthlyInterest = parseFloat(monthlyInterestEl.textContent.replace('₹', '')) || 0;
+            const nextInterestDate = nextInterestDateEl.textContent;
+            
+            const newLoan = {
+                id: Date.now(), // Unique ID
+                clientName,
+                phoneNumber,
+                loanAmount,
+                interestRate,
+                loanDate: loanDate.toISOString().split('T')[0],
+                monthlyInterest,
+                nextInterestDate,
+                status: 'active',
+                payments: [],
+                reminders: []
+            };
+            
+            loans.push(newLoan);
+            saveLoans();
+            
+            // Add client if not exists
+            addClient(clientName, phoneNumber);
+            
+            renderLoans();
+            updateSummary();
+            updateCharts();
+            updateReminders();
+            updateClients();
+            loanForm.reset();
+            
+            // Reset date to today
+            loanDateInput.valueAsDate = new Date();
+            calculateInterest();
+            
+            // Show notification
+            showNotification('Loan added successfully!');
+        });
+        
+        // Add client to client list
+        function addClient(name, phone) {
+            // Check if client already exists
+            const existingClient = clients.find(client => client.phoneNumber === phone);
+            
+            if (!existingClient) {
+                const newClient = {
+                    id: Date.now(),
+                    name,
+                    phoneNumber: phone,
+                    totalLoans: 1,
+                    totalAmount: parseFloat(document.getElementById('loanAmount').value),
+                    lastLoanDate: new Date().toISOString().split('T')[0]
+                };
+                
+                clients.push(newClient);
+                saveClients();
+            } else {
+                // Update existing client
+                existingClient.totalLoans += 1;
+                existingClient.totalAmount += parseFloat(document.getElementById('loanAmount').value);
+                existingClient.lastLoanDate = new Date().toISOString().split('T')[0];
+                saveClients();
+            }
+        }
+        
+        // Save loans to localStorage
+        function saveLoans() {
+            localStorage.setItem('loans', JSON.stringify(loans));
+        }
+        
+        // Save clients to localStorage
+        function saveClients() {
+            localStorage.setItem('clients', JSON.stringify(clients));
+        }
+        
+        // Save payments to localStorage
+        function savePayments() {
+            localStorage.setItem('payments', JSON.stringify(payments));
+        }
+        
+        // Render loans in the table
+        function renderLoans() {
+            if (loans.length === 0) {
+                emptyState.style.display = 'block';
+                loanTableBody.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            loanTableBody.innerHTML = loans.map(loan => `
+                <tr>
+                    <td>${loan.clientName}</td>
+                    <td>${loan.phoneNumber}</td>
+                    <td>₹${loan.loanAmount.toLocaleString('en-IN')}</td>
+                    <td>${loan.interestRate}%</td>
+                    <td>₹${loan.monthlyInterest.toFixed(2)}</td>
+                    <td>${loan.nextInterestDate}</td>
+                    <td><span class="loan-status status-active">Active</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn btn-success" onclick="recordPayment(${loan.id})" title="Record Payment">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </button>
+                        <button class="action-btn btn-whatsapp" onclick="sendWhatsApp(${loan.id})" title="Send WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <button class="action-btn btn-danger" onclick="deleteLoan(${loan.id})" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Update summary cards
+        function updateSummary() {
+            const totalLoans = loans.length;
+            const totalAmount = loans.reduce((sum, loan) => sum + loan.loanAmount, 0);
+            const totalInterest = loans.reduce((sum, loan) => sum + loan.monthlyInterest, 0);
+            
+            totalLoansEl.textContent = totalLoans;
+            totalAmountEl.textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
+            totalInterestEl.textContent = `₹${totalInterest.toFixed(2)}`;
+        }
+        
+        // Delete a loan
+        function deleteLoan(id) {
+            if (confirm('Are you sure you want to delete this loan?')) {
+                loans = loans.filter(loan => loan.id !== id);
+                saveLoans();
+                renderLoans();
+                updateSummary();
+                updateCharts();
+                updateReminders();
+                updateClients();
+                showNotification('Loan deleted successfully!');
+            }
+        }
+        
+        // Record payment
+        function recordPayment(id) {
+            const loan = loans.find(loan => loan.id === id);
+            if (!loan) return;
+            
+            const amount = prompt(`Enter payment amount for ${loan.clientName}:`, loan.monthlyInterest);
+            if (amount && !isNaN(amount)) {
+                const payment = {
+                    id: Date.now(),
+                    loanId: id,
+                    clientName: loan.clientName,
+                    amount: parseFloat(amount),
+                    date: new Date().toISOString().split('T')[0]
+                };
+                
+                payments.push(payment);
+                savePayments();
+                
+                // Update loan's next interest date
+                const nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() + 30);
+                loan.nextInterestDate = formatDate(nextDate);
+                saveLoans();
+                
+                showNotification(`Payment of ₹${amount} recorded for ${loan.clientName}`);
+            }
+        }
+        
+        // Send WhatsApp message
+        function sendWhatsApp(id) {
+            const loan = loans.find(loan => loan.id === id);
+            if (!loan) return;
+            
+            const message = `Hello ${loan.clientName},
+
+Your loan details:
+- Loan Amount: ₹${loan.loanAmount}
+- Interest Rate: ${loan.interestRate}% per month
+- Loan Date: ${loan.loanDate}
+- Monthly Interest: ₹${loan.monthlyInterest.toFixed(2)}
+- Next Interest Date: ${loan.nextInterestDate}
+
+Total Due: ₹${(loan.loanAmount + loan.monthlyInterest).toFixed(2)}
+
+Thank you!`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${loan.phoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Send reminders to all clients
+        sendAllBtn.addEventListener('click', function() {
+            if (loans.length === 0) {
+                alert('No loans to send reminders for!');
+                return;
+            }
+            
+            if (confirm(`Send WhatsApp reminders to all ${loans.length} clients?`)) {
+                // Open the first one, user can continue with others
+                if (loans.length > 0) {
+                    sendWhatsApp(loans[0].id);
+                }
+            }
+        });
+        
+        // Show notification
+        function showNotification(message) {
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Tab functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // In a real app, you would filter loans based on the tab
+                // For this demo, we'll just show all loans
+                renderLoans();
+            });
+        });
+        
+        // Floating button to scroll to form
+        addLoanBtn.addEventListener('click', () => {
+            document.getElementById('loanForm').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('clientName').focus();
+        });
+        
+        // Analytics modal
+        analyticsBtn.addEventListener('click', () => {
+            analyticsModal.classList.add('show');
+        });
+        
+        closeModal.addEventListener('click', () => {
+            analyticsModal.classList.remove('show');
+        });
+        
+        // Export data
+        exportBtn.addEventListener('click', () => {
+            if (loans.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+            
+            showNotification('Data exported successfully!');
+        });
+        
+        // Update reminders list
+        function updateReminders() {
+            if (loans.length === 0) {
+                reminderList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <p>No reminders due. All caught up!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Get loans with upcoming due dates (within 7 days)
+            const today = new Date();
+            const upcomingLoans = loans.filter(loan => {
+                const dueDate = new Date(loan.nextInterestDate);
+                const diffTime = dueDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays <= 7 && diffDays >= 0;
+            });
+            
+            if (upcomingLoans.length === 0) {
+                reminderList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <p>No reminders due. All caught up!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            reminderList.innerHTML = upcomingLoans.map(loan => `
+                <div class="reminder-item">
+                    <div>
+                        <div style="font-weight: 600;">Payment Due - ${loan.clientName}</div>
+                        <div style="color: var(--gray); font-size: 0.9rem;">Due: ${loan.nextInterestDate}</div>
+                    </div>
+                    <div class="reminder-actions">
+                        <button class="action-btn btn-whatsapp" onclick="sendWhatsApp(${loan.id})">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update client list
+        function updateClients() {
+            if (clients.length === 0) {
+                clientList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-plus"></i>
+                        <p>No clients added yet. Add your first loan to see clients.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            clientList.innerHTML = clients.map(client => `
+                <div class="client-item">
+                    <div>
+                        <div style="font-weight: 600;">${client.name}</div>
+                        <div style="color: var(--gray); font-size: 0.9rem;">${client.phoneNumber}</div>
+                    </div>
+                    <div class="client-loans">${client.totalLoans} loans</div>
+                </div>
+            `).join('');
+        }
+        
+        // Auto send reminders
+        sendRemindersBtn.addEventListener('click', function() {
+            if (loans.length === 0) {
+                alert('No loans to send reminders for!');
+                return;
+            }
+            
+            // Get loans with upcoming due dates (within 7 days)
+            const today = new Date();
+            const upcomingLoans = loans.filter(loan => {
+                const dueDate = new Date(loan.nextInterestDate);
+                const diffTime = dueDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays <= 7 && diffDays >= 0;
+            });
+            
+            if (upcomingLoans.length === 0) {
+                alert('No upcoming payments to remind about!');
+                return;
+            }
+            
+            if (confirm(`Send WhatsApp reminders to ${upcomingLoans.length} clients?`)) {
+                // Open the first one, user can continue with others
+                if (upcomingLoans.length > 0) {
+                    sendWhatsApp(upcomingLoans[0].id);
+                }
+            }
+        });
+        
+        // Initialize charts
+        function initCharts() {
+            const reportsCtx = document.getElementById('reportsChart').getContext('2d');
+            reportsChart = new Chart(reportsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Loans Disbursed',
+                        data: [5, 8, 12, 6, 9, 15],
+                        backgroundColor: 'rgba(108, 99, 255, 0.7)',
+                        borderColor: 'rgba(108, 99, 255, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Interest Collected',
+                        data: [12000, 18000, 25000, 15000, 22000, 30000],
+                        backgroundColor: 'rgba(54, 209, 220, 0.7)',
+                        borderColor: 'rgba(54, 209, 220, 1)',
+                        borderWidth: 1,
+                        type: 'line',
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Loans'
+                            }
+                        },
+                        y1: {
+                            position: 'right',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Interest (₹)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
+            analyticsChart = new Chart(analyticsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Active Loans', 'Paid Off', 'Overdue'],
+                    datasets: [{
+                        data: [70, 20, 10],
+                        backgroundColor: [
+                            'rgba(108, 99, 255, 0.7)',
+                            'rgba(54, 209, 220, 0.7)',
+                            'rgba(255, 90, 95, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(108, 99, 255, 1)',
+                            'rgba(54, 209, 220, 1)',
+                            'rgba(255, 90, 95, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update charts with real data
+        function updateCharts() {
+            if (reportsChart && analyticsChart) {
+                // Update reports chart with actual data
+                const loanCounts = [5, 8, 12, 6, 9, 15]; // This would be calculated from actual data
+                const interestData = [12000, 18000, 25000, 15000, 22000, 30000]; // This would be calculated from actual data
+                
+                reportsChart.data.datasets[0].data = loanCounts;
+                reportsChart.data.datasets[1].data = interestData;
+                reportsChart.update();
+                
+                // Update analytics chart with actual data
+                const activeLoans = loans.filter(loan => loan.status === 'active').length;
+                const paidLoans = loans.filter(loan => loan.status === 'paid').length;
+                const overdueLoans = loans.filter(loan => loan.status === 'overdue').length;
+                
+                analyticsChart.data.datasets[0].data = [activeLoans, paidLoans, overdueLoans];
+                analyticsChart.update();
+                
+                // Update insights
+                const totalAmount = loans.reduce((sum, loan) => sum + loan.loanAmount, 0);
+                const avgInterestRate = loans.length > 0 ? 
+                    (loans.reduce((sum, loan) => sum + loan.interestRate, 0) / loans.length).toFixed(1) : 0;
+                
+                document.getElementById('insight1').textContent = `• ${activeLoans} active loans out of ${loans.length} total`;
+                document.getElementById('insight2').textContent = `• Total loan portfolio: ₹${totalAmount.toLocaleString('en-IN')}`;
+                document.getElementById('insight3').textContent = `• Average interest rate: ${avgInterestRate}% per month`;
+                
+                document.getElementById('modalInsight1').textContent = `• ${activeLoans} active loans out of ${loans.length} total`;
+                document.getElementById('modalInsight2').textContent = `• Total loan portfolio: ₹${totalAmount.toLocaleString('en-IN')}`;
+                document.getElementById('modalInsight3').textContent = `• Average interest rate: ${avgInterestRate}% per month`;
+                
+                // Find top client
+                if (loans.length > 0) {
+                    const clientAmounts = {};
+                    loans.forEach(loan => {
+                        if (clientAmounts[loan.clientName]) {
+                            clientAmounts[loan.clientName] += loan.loanAmount;
+                        } else {
+                            clientAmounts[loan.clientName] = loan.loanAmount;
+                        }
+                    });
+                    
+                    let topClient = '';
+                    let topAmount = 0;
+                    for (const client in clientAmounts) {
+                        if (clientAmounts[client] > topAmount) {
+                            topAmount = clientAmounts[client];
+                            topClient = client;
+                        }
+                    }
+                    
+                    document.getElementById('modalInsight4').textContent = `• Top client: ${topClient} (₹${topAmount.toLocaleString('en-IN')})`;
+                    
+                    // Find most profitable loan
+                    let maxInterest = 0;
+                    let profitableLoan = '';
+                    loans.forEach(loan => {
+                        if (loan.monthlyInterest > maxInterest) {
+                            maxInterest = loan.monthlyInterest;
+                            profitableLoan = loan.clientName;
+                        }
+                    });
+                    
+                    document.getElementById('modalInsight5').textContent = `• Most profitable loan: ${profitableLoan} (₹${maxInterest.toFixed(2)} monthly interest)`;
+                }
+            }
+        }
+        
+        // Initialize the app
+        function init() {
+            renderLoans();
+            updateSummary();
+            calculateInterest();
+            initCharts();
+            updateCharts();
+            updateReminders();
+            updateClients();
+        }
+        
+        // Run the app
+        init();
+    </script>
+</body>
+</html>
