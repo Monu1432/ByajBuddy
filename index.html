@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ByajBuddy - Complete Loan Management</title>
+    <title>ByajBuddy - Complete Loan Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -167,6 +167,17 @@
             box-shadow: 0 12px 20px rgba(255, 90, 95, 0.4);
         }
 
+        .btn-print {
+            background: linear-gradient(135deg, #FFB347, #FFCC33);
+            color: var(--white);
+            box-shadow: 0 8px 16px rgba(255, 179, 71, 0.3);
+        }
+
+        .btn-print:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(255, 179, 71, 0.4);
+        }
+
         /* Layout */
         .app-container {
             display: flex;
@@ -198,7 +209,7 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .card h2 {
+        .card h2, .card h3 {
             color: var(--white);
             margin-bottom: 20px;
             padding-bottom: 12px;
@@ -209,7 +220,7 @@
             font-size: 1.3rem;
         }
 
-        .card h2 i {
+        .card h2 i, .card h3 i {
             margin-right: 10px;
             background: linear-gradient(135deg, var(--primary), var(--success));
             -webkit-background-clip: text;
@@ -620,6 +631,117 @@
             transform: rotate(90deg);
         }
 
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printSection, #printSection * {
+                visibility: visible;
+            }
+            #printSection {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                color: black;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .print-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .print-table th, .print-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .print-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .print-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .print-summary {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .print-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .print-status-active {
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+
+        .print-status-pending {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .print-status-overdue {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        /* Print Buttons */
+        .print-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Payment History */
+        .payment-history {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+
         /* Mobile Menu */
         .mobile-menu-btn {
             display: none;
@@ -628,46 +750,6 @@
             color: var(--white);
             font-size: 1.3rem;
             cursor: pointer;
-        }
-
-        /* Client Item Styles */
-        .client-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .client-item:last-child {
-            border-bottom: none;
-        }
-
-        .client-loans {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: rgba(108, 99, 255, 0.2);
-            color: var(--primary);
-        }
-
-        /* Reminder Item Styles */
-        .reminder-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .reminder-item:last-child {
-            border-bottom: none;
-        }
-
-        .reminder-actions {
-            display: flex;
-            gap: 10px;
         }
 
         /* Responsive Styles */
@@ -693,7 +775,7 @@
                 border-radius: 20px;
             }
             
-            .card h2 {
+            .card h2, .card h3 {
                 font-size: 1.4rem;
                 margin-bottom: 25px;
             }
@@ -885,6 +967,9 @@
                 <button class="btn btn-success" id="analyticsBtn">
                     <i class="fas fa-chart-pie"></i> Analytics
                 </button>
+                <button class="btn btn-print" id="printSummaryBtn">
+                    <i class="fas fa-print"></i> Print Summary
+                </button>
                 <button class="btn btn-whatsapp" id="remindersBtn">
                     <i class="fas fa-bell"></i> Auto Reminders
                 </button>
@@ -924,9 +1009,9 @@
                     </div>
                     <div class="loan-details">
                         <p><strong>Key Insights:</strong></p>
-                        <p id="insight1">• 70% of loans are performing well</p>
-                        <p id="insight2">• 12% increase in loan portfolio this quarter</p>
-                        <p id="insight3">• Average interest rate: 4.2% per month</p>
+                        <p id="insight1">• No loans added yet</p>
+                        <p id="insight2">• Add your first loan to see insights</p>
+                        <p id="insight3">• Track your loan portfolio growth</p>
                     </div>
                     <button class="btn btn-primary btn-block" style="margin-top: 20px;">
                         <i class="fas fa-download"></i> Download Full Report
@@ -956,7 +1041,7 @@
                             <p>No clients added yet. Add your first loan to see clients.</p>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-block" style="margin-top: 20px;">
+                    <button class="btn btn-primary btn-block" style="margin-top: 20px;" id="addClientBtn">
                         <i class="fas fa-user-plus"></i> Add New Client
                     </button>
                 </div>
@@ -1055,6 +1140,12 @@
 
             <div>
                 <div class="card">
+                    <div class="print-buttons">
+                        <button class="btn btn-print" id="printAllLoansBtn">
+                            <i class="fas fa-print"></i> Print All Loans
+                        </button>
+                    </div>
+                    
                     <div class="tabs">
                         <div class="tab active" data-tab="all">All Loans</div>
                         <div class="tab" data-tab="due">Due This Month</div>
@@ -1120,6 +1211,10 @@ Thank you!</textarea>
         <i class="fas fa-check-circle"></i> Loan added successfully!
     </div>
 
+    <!-- Hidden Print Section -->
+    <div id="printSection" style="display: none;"></div>
+
+    <!-- Analytics Modal -->
     <div class="modal" id="analyticsModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1134,16 +1229,47 @@ Thank you!</textarea>
             
             <div class="loan-details">
                 <p><strong>Portfolio Insights:</strong></p>
-                <p id="modalInsight1">• 70% of loans are performing well</p>
-                <p id="modalInsight2">• 12% increase in loan portfolio this quarter</p>
-                <p id="modalInsight3">• Average interest rate: 4.2% per month</p>
-                <p id="modalInsight4">• Top client: Rahul Sharma (₹50,000)</p>
-                <p id="modalInsight5">• Most profitable loan: ₹2,500 monthly interest</p>
+                <p id="modalInsight1">• No loans added yet</p>
+                <p id="modalInsight2">• Add your first loan to see insights</p>
+                <p id="modalInsight3">• Track your loan portfolio growth</p>
+                <p id="modalInsight4">• Monitor client payment behavior</p>
+                <p id="modalInsight5">• Identify profitable loan opportunities</p>
             </div>
             
             <button class="btn btn-primary btn-block" style="margin-top: 20px;">
                 <i class="fas fa-download"></i> Download Detailed Report
             </button>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div class="modal" id="clientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Client</h3>
+                <button class="close-btn" id="closeClientModal">&times;</button>
+            </div>
+            <form id="clientForm">
+                <div class="form-group">
+                    <label for="newClientName">Client Name</label>
+                    <input type="text" id="newClientName" placeholder="Enter client name" required>
+                </div>
+                <div class="form-group">
+                    <label for="newClientPhone">Phone Number</label>
+                    <input type="tel" id="newClientPhone" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="newClientEmail">Email Address</label>
+                    <input type="email" id="newClientEmail" placeholder="Enter email address">
+                </div>
+                <div class="form-group">
+                    <label for="newClientAddress">Address</label>
+                    <textarea id="newClientAddress" rows="3" placeholder="Enter client address"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Save Client
+                </button>
+            </form>
         </div>
     </div>
 
@@ -1180,6 +1306,13 @@ Thank you!</textarea>
         const sendRemindersBtn = document.getElementById('sendRemindersBtn');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const userActions = document.getElementById('userActions');
+        const printAllLoansBtn = document.getElementById('printAllLoansBtn');
+        const printSummaryBtn = document.getElementById('printSummaryBtn');
+        const printSection = document.getElementById('printSection');
+        const addClientBtn = document.getElementById('addClientBtn');
+        const clientModal = document.getElementById('clientModal');
+        const closeClientModal = document.getElementById('closeClientModal');
+        const clientForm = document.getElementById('clientForm');
         
         // Input elements for auto-calculation
         const loanAmountInput = document.getElementById('loanAmount');
@@ -1285,7 +1418,7 @@ Thank you!</textarea>
             saveLoans();
             
             // Add client if not exists
-            addClient(clientName, phoneNumber, loanAmount);
+            addClient(clientName, phoneNumber);
             
             renderLoans();
             updateSummary();
@@ -1303,7 +1436,7 @@ Thank you!</textarea>
         });
         
         // Add client to client list
-        function addClient(name, phone, loanAmount) {
+        function addClient(name, phone) {
             // Check if client already exists
             const existingClient = clients.find(client => client.phoneNumber === phone);
             
@@ -1313,7 +1446,7 @@ Thank you!</textarea>
                     name,
                     phoneNumber: phone,
                     totalLoans: 1,
-                    totalAmount: loanAmount,
+                    totalAmount: parseFloat(document.getElementById('loanAmount').value),
                     lastLoanDate: new Date().toISOString().split('T')[0]
                 };
                 
@@ -1322,7 +1455,7 @@ Thank you!</textarea>
             } else {
                 // Update existing client
                 existingClient.totalLoans += 1;
-                existingClient.totalAmount += loanAmount;
+                existingClient.totalAmount += parseFloat(document.getElementById('loanAmount').value);
                 existingClient.lastLoanDate = new Date().toISOString().split('T')[0];
                 saveClients();
             }
@@ -1369,6 +1502,9 @@ Thank you!</textarea>
                         <button class="action-btn btn-whatsapp" onclick="sendWhatsApp(${loan.id})" title="Send WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </button>
+                        <button class="action-btn btn-print" onclick="printLoan(${loan.id})" title="Print">
+                            <i class="fas fa-print"></i>
+                        </button>
                         <button class="action-btn btn-danger" onclick="deleteLoan(${loan.id})" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -1391,18 +1527,8 @@ Thank you!</textarea>
         // Delete a loan
         function deleteLoan(id) {
             if (confirm('Are you sure you want to delete this loan?')) {
-                // Find the loan to be deleted
-                const loanToDelete = loans.find(loan => loan.id === id);
-                
-                // Remove the loan
                 loans = loans.filter(loan => loan.id !== id);
                 saveLoans();
-                
-                // Update client data
-                if (loanToDelete) {
-                    updateClientAfterLoanDeletion(loanToDelete.clientName, loanToDelete.phoneNumber);
-                }
-                
                 renderLoans();
                 updateSummary();
                 updateCharts();
@@ -1410,32 +1536,6 @@ Thank you!</textarea>
                 updateClients();
                 showNotification('Loan deleted successfully!');
             }
-        }
-        
-        // Update client data after loan deletion
-        function updateClientAfterLoanDeletion(clientName, phoneNumber) {
-            // Find all loans for this client
-            const clientLoans = loans.filter(loan => 
-                loan.clientName === clientName && loan.phoneNumber === phoneNumber
-            );
-            
-            if (clientLoans.length === 0) {
-                // If no loans remain for this client, remove them from clients list
-                clients = clients.filter(client => client.phoneNumber !== phoneNumber);
-            } else {
-                // Update client data with remaining loans
-                const client = clients.find(client => client.phoneNumber === phoneNumber);
-                if (client) {
-                    client.totalLoans = clientLoans.length;
-                    client.totalAmount = clientLoans.reduce((sum, loan) => sum + loan.loanAmount, 0);
-                    client.lastLoanDate = clientLoans.reduce((latest, loan) => 
-                        new Date(loan.loanDate) > new Date(latest) ? loan.loanDate : latest, 
-                        clientLoans[0].loanDate
-                    );
-                }
-            }
-            
-            saveClients();
         }
         
         // Record payment
@@ -1647,6 +1747,235 @@ Thank you!`;
                     sendWhatsApp(upcomingLoans[0].id);
                 }
             }
+        });
+        
+        // Print individual loan with all details
+        function printLoan(id) {
+            const loan = loans.find(loan => loan.id === id);
+            if (!loan) return;
+            
+            const printContent = `
+                <div class="print-header">
+                    <h1>FinFlow Loan Details</h1>
+                    <p>Loan Agreement & Details</p>
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div>
+                    <h2>Client Information</h2>
+                    <table class="print-table">
+                        <tr>
+                            <th>Client Name</th>
+                            <td>${loan.clientName}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td>${loan.phoneNumber}</td>
+                        </tr>
+                    </table>
+                    
+                    <h2>Loan Details</h2>
+                    <table class="print-table">
+                        <tr>
+                            <th>Loan Amount</th>
+                            <td>₹${loan.loanAmount.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr>
+                            <th>Interest Rate</th>
+                            <td>${loan.interestRate}% per month</td>
+                        </tr>
+                        <tr>
+                            <th>Loan Date</th>
+                            <td>${loan.loanDate}</td>
+                        </tr>
+                        <tr>
+                            <th>Monthly Interest</th>
+                            <td>₹${loan.monthlyInterest.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <th>Next Interest Date</th>
+                            <td>${loan.nextInterestDate}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><span class="print-status print-status-active">${loan.status}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Total Due</th>
+                            <td>₹${(loan.loanAmount + loan.monthlyInterest).toFixed(2)}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="print-footer">
+                    <p>This is a computer-generated document and does not require a signature.</p>
+                    <p>FinFlow Loan Management System</p>
+                </div>
+            `;
+            
+            printSection.innerHTML = printContent;
+            printSection.style.display = 'block';
+            window.print();
+            printSection.style.display = 'none';
+        }
+        
+        // Print all loans with all details
+        printAllLoansBtn.addEventListener('click', function() {
+            if (loans.length === 0) {
+                alert('No loans to print!');
+                return;
+            }
+            
+            let tableRows = '';
+            loans.forEach(loan => {
+                tableRows += `
+                    <tr>
+                        <td>${loan.clientName}</td>
+                        <td>${loan.phoneNumber}</td>
+                        <td>₹${loan.loanAmount.toLocaleString('en-IN')}</td>
+                        <td>${loan.interestRate}%</td>
+                        <td>₹${loan.monthlyInterest.toFixed(2)}</td>
+                        <td>${loan.nextInterestDate}</td>
+                        <td><span class="print-status print-status-active">${loan.status}</span></td>
+                    </tr>
+                `;
+            });
+            
+            const printContent = `
+                <div class="print-header">
+                    <h1>FinFlow - All Loan Records</h1>
+                    <p>Complete list of all loans with full details</p>
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <table class="print-table">
+                    <thead>
+                        <tr>
+                            <th>Client Name</th>
+                            <th>Phone Number</th>
+                            <th>Loan Amount</th>
+                            <th>Interest Rate</th>
+                            <th>Monthly Interest</th>
+                            <th>Next Payment Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+                
+                <div class="print-summary">
+                    <h3>Portfolio Summary</h3>
+                    <p><strong>Total Loans:</strong> ${loans.length}</p>
+                    <p><strong>Total Loan Amount:</strong> ₹${loans.reduce((sum, loan) => sum + loan.loanAmount, 0).toLocaleString('en-IN')}</p>
+                    <p><strong>Expected Monthly Interest:</strong> ₹${loans.reduce((sum, loan) => sum + loan.monthlyInterest, 0).toFixed(2)}</p>
+                </div>
+                
+                <div class="print-footer">
+                    <p>FinFlow Loan Management System</p>
+                </div>
+            `;
+            
+            printSection.innerHTML = printContent;
+            printSection.style.display = 'block';
+            window.print();
+            printSection.style.display = 'none';
+        });
+        
+        // Print summary
+        printSummaryBtn.addEventListener('click', function() {
+            const totalLoans = loans.length;
+            const totalAmount = loans.reduce((sum, loan) => sum + loan.loanAmount, 0);
+            const totalInterest = loans.reduce((sum, loan) => sum + loan.monthlyInterest, 0);
+            
+            const printContent = `
+                <div class="print-header">
+                    <h1>FinFlow - Portfolio Summary</h1>
+                    <p>Complete overview of loan portfolio</p>
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div class="print-summary">
+                    <h2>Portfolio Overview</h2>
+                    <table class="print-table">
+                        <tr>
+                            <th>Total Loans</th>
+                            <td>${totalLoans}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Loan Amount</th>
+                            <td>₹${totalAmount.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr>
+                            <th>Expected Monthly Interest</th>
+                            <td>₹${totalInterest.toFixed(2)}</td>
+                        </tr>
+                    </table>
+                    
+                    <h2>Client Statistics</h2>
+                    <table class="print-table">
+                        <tr>
+                            <th>Total Clients</th>
+                            <td>${clients.length}</td>
+                        </tr>
+                        <tr>
+                            <th>Average Loans per Client</th>
+                            <td>${clients.length > 0 ? (totalLoans / clients.length).toFixed(1) : 0}</td>
+                        </tr>
+                        <tr>
+                            <th>Average Loan Amount</th>
+                            <td>₹${totalLoans > 0 ? (totalAmount / totalLoans).toFixed(2) : 0}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="print-footer">
+                    <p>ByajBuddy </p>
+                </div>
+            `;
+            
+            printSection.innerHTML = printContent;
+            printSection.style.display = 'block';
+            window.print();
+            printSection.style.display = 'none';
+        });
+        
+        // Add Client Modal
+        addClientBtn.addEventListener('click', function() {
+            clientModal.classList.add('show');
+        });
+        
+        closeClientModal.addEventListener('click', function() {
+            clientModal.classList.remove('show');
+        });
+        
+        // Add new client
+        clientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newClientName').value;
+            const phone = document.getElementById('newClientPhone').value;
+            const email = document.getElementById('newClientEmail').value;
+            const address = document.getElementById('newClientAddress').value;
+            
+            const newClient = {
+                id: Date.now(),
+                name,
+                phoneNumber: phone,
+                email,
+                address,
+                totalLoans: 0,
+                totalAmount: 0,
+                lastLoanDate: null
+            };
+            
+            clients.push(newClient);
+            saveClients();
+            updateClients();
+            clientForm.reset();
+            clientModal.classList.remove('show');
+            showNotification('Client added successfully!');
         });
         
         // Initialize charts
